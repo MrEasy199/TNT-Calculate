@@ -1,22 +1,16 @@
-class Eval {
-  constructor(Client) {
-    Object.defineProperty(this, "Client", { value: Client });
-    this.name = "eval";
-    this.aliases = ["e"];
-    this.description = "Runs javascript";
-    this.category = "Developer";
-    this.enabled = true;
-    this.dev = true;
-  }
-
-  async run(Discord, message, args, Client) {
+module.exports = {
+  name: "eval",
+  description: "Runs JavaScript",
+  category: "Developer",
+  aliases: [""],
+  execute(message, args) {
     function clean(text) {
       if (typeof(text) === "string")
         return text.replace(/'/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
       else return text;
-  }
+    }
 
-  let code = args.join(' ');
+    let code = args.join(' ');
     if(!code) return message.channel.send('Please specify JS code to run.');
     try {
       let result = eval(code);
@@ -36,5 +30,4 @@ class Eval {
       message.channel.send(embed);
     }
   }
-}
-module.exports = Eval;
+};

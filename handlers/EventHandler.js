@@ -1,8 +1,9 @@
 const fs = require('fs');
+const index = require(`../index.js`);
 
 class EventHandler {
-  constructor(Client) {
-    this.Client = Client;
+  constructor(client) {
+    this.client = index.CLIENT;
     this.EventLoader();
   }
 
@@ -17,7 +18,7 @@ class EventHandler {
         event = new event();
 
         if(!event.enabled) continue;
-        this.Client.on(event.event, event.run.bind(this));
+        this.client.on(event.event, event.run.bind(this));
         
         console.log(`[INFO]: Loaded Event: ${f}`)
       }

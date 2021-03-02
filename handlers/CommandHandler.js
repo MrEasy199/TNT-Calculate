@@ -1,33 +1,42 @@
 const discord = require('discord.js');
 const fs = require('fs');
+const index = require(`../index.js`);
 
 class CommandHandler {
-  constructor(Client) {
-    this.Client = Client;
+  constructor(client) {
+    this.client = index.CLIENT;
 
-    global.Commands = new discord.Collection();
-    global.Aliases = new discord.Collection();
+    client.commands = new discord.Collection();
+    client.Aliases = new discord.Collection();
 
     this.CommandLoader();
   }
 
   CommandLoader() {
-    fs.readdir(`./commands`, (err, files) => {
-    //
-    if(err) return console.log(err);
-    //
-    let cmds = files.filter(f => f.split(".").pop() === "js");
-    //
-    cmds.forEach(f => {
-        let command = require(`../commands/${f}`)
-        //
-        command = new command(this)
-        Commands.set(command.name, command);
-        console.log(`${command.category ?? "No category"} || Loaded ${f}`);
-        //
-        if(command.aliases) for (let alias of command.aliases) Aliases.set(alias, command.name);
-    });
-  });  
+    const files = fs.readdirSync('./commands').filter(file => file.endsWith(".js"));
+
+    for (const file of files) {
+      const command = require(`../commands/${file}`);
+      this.client.commands.set(command.name, command);
+    }
   }
-}
+};
+
+index.CLIENT.on(`message`, async message => {
+  if (!message.content.toLowerCase().startsWith(index.PREFIX)) return;
+
+  let command = message.content.slice(index.PREFIX.length).trim().split(' ').slice(0).shift().toLowerCase();
+  let args = message.content.slice(index.PREFIX.length+command.length).trim().split(' ')
+
+  try {
+    module.exports.message = message;
+    
+    index.CLIENT.commands.get(command).execute(message, args);
+  } catch(err) {
+    console.log(`[WARN/ERROR]:\n ${err}`);
+  } finally {
+    console.log(`[INFO]:\n  User: ${message.author.username}#${message.author.discriminator}\n  Command: ${command}\n  Args: ${args.join(" ")}`);
+  }
+});
+
 module.exports = CommandHandler;

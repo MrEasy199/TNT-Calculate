@@ -1,3 +1,5 @@
 {
-	"prefix": "calc "
+	"PREFIX": "calc ",
+	"DIVIDER": "X=-=-=-=-=x=-=-=-=-=xXx=-=-=-=-=x=-=-=-=-=X",
+	"WARN_DIVIDER": "(!)+-+-=x=-+-+X+-+-=x=-+-+(!)`"
 }
