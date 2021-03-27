@@ -1,3 +1,5 @@
+# The code for the actual calculator itself will be added soon enough! I have other projects taking up my time at the moment.
+
 # Description
 ## TNT-Calculate
 Discord TNT Calculator that aims to be 100% accurate in it's calculations
